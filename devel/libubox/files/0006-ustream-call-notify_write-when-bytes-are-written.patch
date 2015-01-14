@@ -1,0 +1,71 @@
+From 51fa5087474d1078e219480231f89cf3cec814be Mon Sep 17 00:00:00 2001
+From: Yousong Zhou <yszhou4tech@gmail.com>
+Date: Mon, 10 Nov 2014 16:06:03 +0800
+Subject: [PATCH 6/7] ustream: call notify_write() when bytes are written.
+
+---
+ ustream.c |   20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/ustream.c b/ustream.c
+index 64cdc6a..1d0c38e 100644
+--- a/ustream.c
++++ b/ustream.c
+@@ -364,6 +364,17 @@ static void ustream_write_error(struct ustream *s)
+ 	s->write_error = true;
+ }
+ 
++static int ustream_call_write_cb(struct ustream *s, const char *data, int len, bool more)
++{
++	int bytes;
++
++	bytes = s->write(s, data, len, more);
++	if (s->notify_write && bytes > 0)
++		s->notify_write(s, bytes);
++
++	return bytes;
++}
++
+ bool ustream_write_pending(struct ustream *s)
+ {
+ 	struct ustream_buf *buf = s->w.head;
+@@ -376,7 +387,7 @@ bool ustream_write_pending(struct ustream *s)
+ 		struct ustream_buf *next = buf->next;
+ 		int maxlen = buf->tail - buf->data;
+ 
+-		len = s->write(s, buf->data, maxlen, !!buf->next);
++		len = ustream_call_write_cb(s, buf->data, maxlen, !!buf->next);
+ 		if (len < 0) {
+ 			ustream_write_error(s);
+ 			break;
+@@ -396,9 +407,6 @@ bool ustream_write_pending(struct ustream *s)
+ 		buf = next;
+ 	}
+ 
+-	if (s->notify_write)
+-		s->notify_write(s, wr);
+-
+ 	if (s->eof && wr && !s->w.data_bytes)
+ 		ustream_state_change(s);
+ 
+@@ -441,7 +449,7 @@ int ustream_write(struct ustream *s, const char *data, int len, bool more)
+ 		return 0;
+ 
+ 	if (!l->data_bytes) {
+-		wr = s->write(s, data, len, more);
++		wr = ustream_call_write_cb(s, data, len, more);
+ 		if (wr == len)
+ 			return wr;
+ 
+@@ -475,7 +483,7 @@ int ustream_vprintf(struct ustream *s, const char *format, va_list arg)
+ 		maxlen = vsnprintf(buf, MAX_STACK_BUFLEN, format, arg2);
+ 		va_end(arg2);
+ 		if (maxlen < MAX_STACK_BUFLEN) {
+-			wr = s->write(s, buf, maxlen, false);
++			wr = ustream_call_write_cb(s, buf, maxlen, false);
+ 			if (wr < 0) {
+ 				ustream_write_error(s);
+ 				return wr;
+-- 
+1.7.10.4
+

@@ -1,0 +1,37 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+# $Id$
+
+PortSystem                  1.0
+PortGroup                   cmake 1.0
+
+name                        ustream-ssl
+version                     20141207
+revision                    1
+categories                  devel
+platforms                   darwin
+maintainers                 yousong
+homepage                    "http://nbd.name/gitweb.cgi?p=ustream-ssl.git;a=summary"
+
+description                 C utility functions for OpenWrt
+
+#long_description            libHSPlasma is a library for reading files used \
+
+fetch.type                  git
+git.url                     git://nbd.name/ustream-ssl.git
+git.branch                  b1c19610b2f4637c7dfe1b620b6474bbb9b23fe4
+
+depends_lib                 port:libubox \
+                            port:openssl
+
+patchfiles                  0001-examples-add-.notify_write-callback.patch \
+                            0002-Fix-SSL-negotiation-being-interrupted-by-.notify_wri.patch \
+                            0003-cmake-Do-not-hardcode-opt-local-include-for-Apple.patch
+
+patch.pre_args              -p1
+
+if {[variant_isset debug]} {
+    configure.optflags -O1
+    configure.cflags-append -ggdb
+    configure.cxxflags-append -ggdb
+}
+

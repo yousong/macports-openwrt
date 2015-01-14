@@ -1,0 +1,42 @@
+From 9be106195f5782aac6ffa7adc71e89812728d957 Mon Sep 17 00:00:00 2001
+From: Yousong Zhou <yszhou4tech@gmail.com>
+Date: Tue, 11 Nov 2014 04:27:21 +0800
+Subject: [PATCH 1/7] libubox: drop legacy json-c support
+
+The cmake logic is wrong (E.G. PKG_CHECK_FOR_MODULES fails unless all
+modules are found), and the legacy libjson.so name is also used by the other
+libjson (http://sourceforge.net/projects/libjson/) which provides an
+incompatible API, so just drop it.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CMakeLists.txt |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f24fee9..c351fef 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -13,7 +13,7 @@ IF(APPLE)
+ ENDIF()
+ 
+ INCLUDE(FindPkgConfig)
+-PKG_CHECK_MODULES(JSONC json-c json)
++PKG_CHECK_MODULES(JSONC json-c)
+ IF(JSONC_FOUND)
+   ADD_DEFINITIONS(-DJSONC)
+   INCLUDE_DIRECTORIES(${JSONC_INCLUDE_DIRS})
+@@ -44,8 +44,9 @@ INSTALL(TARGETS ubox ubox-static
+ )
+ 
+ ADD_SUBDIRECTORY(lua)
++ADD_SUBDIRECTORY(examples)
+ 
+-find_library(json NAMES json-c json)
++find_library(json NAMES json-c)
+ IF(EXISTS ${json})
+ 	ADD_LIBRARY(blobmsg_json SHARED blobmsg_json.c)
+ 	TARGET_LINK_LIBRARIES(blobmsg_json ubox ${json})
+-- 
+1.7.10.4
+

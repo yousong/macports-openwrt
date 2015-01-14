@@ -1,0 +1,22 @@
+From ab49822c877f591302e322daee39cda464914f1d Mon Sep 17 00:00:00 2001
+From: Yousong Zhou <yszhou4tech@gmail.com>
+Date: Tue, 11 Nov 2014 05:07:23 +0800
+Subject: [PATCH 3/7] examples: add inttypes.h for using PRIu64.
+
+---
+ examples/blobmsg-example.c |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/examples/blobmsg-example.c b/examples/blobmsg-example.c
+index 69ddce8..01b0518 100644
+--- a/examples/blobmsg-example.c
++++ b/examples/blobmsg-example.c
+@@ -1,4 +1,5 @@
+ #include <stdio.h>
++#include <inttypes.h>
+ 
+ #include "blobmsg.h"
+ #include "blobmsg_json.h"
+-- 
+1.7.10.4
+
