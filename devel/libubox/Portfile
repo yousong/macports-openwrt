@@ -5,7 +5,7 @@ PortSystem                  1.0
 PortGroup                   cmake 1.0
 
 name                        libubox
-version                     20141207
+version                     20150121
 revision                    1
 categories                  devel
 platforms                   darwin
@@ -16,18 +16,13 @@ description                 C utility functions for OpenWrt
 
 fetch.type                  git
 git.url                     git://git.openwrt.org/project/libubox.git
-git.branch                  f09ae76445e32511433fdab0a1bcda73aa84986d
+git.branch                  ad9aa180d30ebf2ae91e3cc656c814693bb921ca
 
 depends_lib                 port:json-c \
                             port:lua51
 
-patchfiles                  0001-libubox-drop-legacy-json-c-support.patch \
-                            0002-lua-do-not-hardcode-opt-local-include-for-Apple.patch \
-                            0003-examples-add-inttypes.h-for-using-PRIu64.patch \
-                            0004-examples-fix-in-tree-build.patch \
-                            0005-ustream-add-function-ustream_fill_with_read_buf.patch \
-                            0006-ustream-call-notify_write-when-bytes-are-written.patch \
-                            0007-cmake-fix-build-with-MacPorts.patch
+patchfiles                  0001-cmake-fix-build-with-MacPorts.patch
+
 patch.pre_args              -p1
 
 if {[variant_isset debug]} {
