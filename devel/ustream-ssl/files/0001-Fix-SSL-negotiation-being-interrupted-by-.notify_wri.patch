@@ -1,20 +1,22 @@
-From 0efcab7de20d89701369b8f5c9c98c481ed636d0 Mon Sep 17 00:00:00 2001
+From d4dd32e7b7d58c073cd756eeda9ee5d0ca28ff42 Mon Sep 17 00:00:00 2001
 From: Yousong Zhou <yszhou4tech@gmail.com>
-Date: Mon, 10 Nov 2014 20:16:37 +0800
-Subject: [PATCH 2/3] Fix SSL negotiation being interrupted by .notify_write
- from BIO method.
+Date: Wed, 11 Feb 2015 16:25:57 +0800
+Subject: [PATCH] Fix SSL negotiation being interrupted by .notify_write from
+ BIO method.
 
 ustream_ssl_check_conn() may be called by .notify_write while a previous
 SSL_connect() is still in process.  This can happen because the
 .notify_write callback will may be triggered by writes in the BIO
 methods.
+
+Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
 ---
- ustream-ssl.c |   19 +++++++++++++++----
+ ustream-ssl.c |   15 +++++++++++++--
  ustream-ssl.h |    1 +
- 2 files changed, 16 insertions(+), 4 deletions(-)
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/ustream-ssl.c b/ustream-ssl.c
-index dd0faf9..84104b0 100644
+index dd0faf9..d8d1188 100644
 --- a/ustream-ssl.c
 +++ b/ustream-ssl.c
 @@ -34,12 +34,22 @@ static void ustream_ssl_error_cb(struct uloop_timeout *t)
@@ -42,24 +44,6 @@ index dd0faf9..84104b0 100644
  		us->connected = true;
  		if (us->notify_connected)
  			us->notify_connected(us);
-@@ -55,7 +65,7 @@ static bool __ustream_ssl_poll(struct ustream *s)
- 	bool more = false;
- 
- 	ustream_ssl_check_conn(us);
--	if (!us->connected || us->error)
-+	if (!us->connected || us->error || us->connecting)
- 		return false;
- 
- 	do {
-@@ -106,7 +116,7 @@ static int ustream_ssl_write(struct ustream *s, const char *buf, int len, bool m
- {
- 	struct ustream_ssl *us = container_of(s, struct ustream_ssl, stream);
- 
--	if (!us->connected || us->error)
-+	if (!us->connected || us->error || us->connecting)
- 		return 0;
- 
- 	if (us->conn->w.data_bytes)
 @@ -141,6 +151,7 @@ static void ustream_ssl_free(struct ustream *s)
  	us->ssl = NULL;
  	us->conn = NULL;

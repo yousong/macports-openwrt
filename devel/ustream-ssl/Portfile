@@ -5,7 +5,7 @@ PortSystem                  1.0
 PortGroup                   cmake 1.0
 
 name                        ustream-ssl
-version                     20141207
+version                     20141211
 revision                    1
 categories                  devel
 platforms                   darwin
@@ -18,14 +18,12 @@ description                 C utility functions for OpenWrt
 
 fetch.type                  git
 git.url                     git://nbd.name/ustream-ssl.git
-git.branch                  b1c19610b2f4637c7dfe1b620b6474bbb9b23fe4
+git.branch                  16bf6f0f4b3bee60540af9b289d55faee2a3f86e
 
 depends_lib                 port:libubox \
                             port:openssl
 
-patchfiles                  0001-examples-add-.notify_write-callback.patch \
-                            0002-Fix-SSL-negotiation-being-interrupted-by-.notify_wri.patch \
-                            0003-cmake-Do-not-hardcode-opt-local-include-for-Apple.patch
+patchfiles                  0001-Fix-SSL-negotiation-being-interrupted-by-.notify_wri.patch
 
 patch.pre_args              -p1
 
