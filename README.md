@@ -14,8 +14,8 @@ This is Portfile repository for porting packages such as libubox, ustream-ssl, e
 
 	- Generate port index.
 
-		cd /Users/yousong/dev/macports-openwrt
-		portindex
+			cd /Users/yousong/dev/macports-openwrt
+			portindex
 
 	- Search for packages in it to see if it has been indexed.
 
@@ -25,11 +25,6 @@ This is Portfile repository for porting packages such as libubox, ustream-ssl, e
 
 			sudo port build libubox
 			sudo port install libubox
-
-		Build logs can be found at the following places if anything wrong happened.  The actual path can vary, be sure to read the output from the port command.
-
-			/opt/local/var/macports/build/_Users_yousong_dev_macports-openwrt_devel_libubox/libubox/work/libubox-20150115/CMakeFiles/CMakeError.log
-			/opt/local/var/macports/build/_Users_yousong_dev_macports-openwrt_devel_libubox/libubox/work/libubox-20150115/CMakeFiles/CMakeOutput.log
 
 
 ## Tips
@@ -42,3 +37,8 @@ Sometimes I found it useful to have handy shell function ready when testing the 
 		sudo port clean "$name"
 		sudo port install "$name"
 	}
+
+Build logs can be found at the following places if anything wrong happened.  The actual path can vary, be sure to read the output from the port command.
+
+	/opt/local/var/macports/build/_Users_yousong_dev_macports-openwrt_devel_libubox/libubox/work/libubox-20150115/CMakeFiles/CMakeError.log
+	/opt/local/var/macports/build/_Users_yousong_dev_macports-openwrt_devel_libubox/libubox/work/libubox-20150115/CMakeFiles/CMakeOutput.log
