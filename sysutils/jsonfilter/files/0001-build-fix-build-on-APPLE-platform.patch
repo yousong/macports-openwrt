@@ -1,0 +1,38 @@
+From 5e4116c6e52f32197377fa9c6ebe4df2e8298f3e Mon Sep 17 00:00:00 2001
+From: Yousong Zhou <yszhou4tech@gmail.com>
+Date: Mon, 16 Feb 2015 17:40:13 +0800
+Subject: [PATCH 1/2] build: fix build on APPLE platform.
+
+ - Remove hardcoded path definition.
+ - Detect linker flags for detecting dead code.
+
+Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
+---
+ CMakeLists.txt | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8db786e..a64743d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3,11 +3,12 @@ cmake_minimum_required(VERSION 2.6)
+ PROJECT(jsonpath C)
+ ADD_DEFINITIONS(-Os -Wall -Werror --std=gnu99 -Wmissing-declarations -Wno-error=unused-variable -ffunction-sections -D_GNU_SOURCE)
+ 
+-SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "-Wl,--gc-sections")
+-
+-IF(APPLE)
+-  INCLUDE_DIRECTORIES(/opt/local/include)
+-  LINK_DIRECTORIES(/opt/local/lib)
++INCLUDE(CheckCCompilerFlag)
++CHECK_C_COMPILER_FLAG("-Wl,-dead_strip" FLAG_dead_strip)
++IF(NOT FLAG_dead_strip)
++	SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "-Wl,--gc-sections")
++ELSE()
++	SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "-Wl,-dead_strip")
+ ENDIF()
+ 
+ find_library(json NAMES json-c json)
+-- 
+2.2.2
+

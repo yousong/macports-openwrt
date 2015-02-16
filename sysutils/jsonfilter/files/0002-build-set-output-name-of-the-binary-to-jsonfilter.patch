@@ -1,0 +1,26 @@
+From 71431c60192c19b515bcc28e4af7f05f96c71853 Mon Sep 17 00:00:00 2001
+From: Yousong Zhou <yszhou4tech@gmail.com>
+Date: Mon, 16 Feb 2015 17:52:31 +0800
+Subject: [PATCH 2/2] build: set output name of the binary to jsonfilter.
+
+jsonfilter is the name current in use within OpenWrt.
+
+Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
+---
+ CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a64743d..7ff876b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,5 +42,6 @@ SET_PROPERTY(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "lemon;parser
+ SET_SOURCE_FILES_PROPERTIES("parser.c" PROPERTIES GENERATED TRUE)
+ ADD_EXECUTABLE(jsonpath main.c ast.c lexer.c parser.c matcher.c)
+ TARGET_LINK_LIBRARIES(jsonpath ubox ${json})
++SET_TARGET_PROPERTIES(jsonpath PROPERTIES OUTPUT_NAME jsonfilter)
+ 
+ INSTALL(TARGETS jsonpath RUNTIME DESTINATION bin)
+-- 
+2.2.2
+
