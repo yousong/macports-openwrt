@@ -1,0 +1,57 @@
+From f200f8452e52e9db4df83f1e7c45a0bd87038537 Mon Sep 17 00:00:00 2001
+From: Yousong Zhou <yszhou4tech@gmail.com>
+Date: Mon, 16 Feb 2015 23:09:40 +0800
+Subject: [PATCH] build: fix build on APPLE platform with MacPorts.
+
+ - Remove hardcoded path.
+ - Use lua-5.1 instead of lua5.1 for the name of lua library.
+ - Set explicitly the policy on MACOSX_RPATH to OLD to silence the
+   warning from cmake.
+
+Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
+---
+ CMakeLists.txt     | 7 ++-----
+ lua/CMakeLists.txt | 2 +-
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index cb2f420..40032e9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,8 @@
+ cmake_minimum_required(VERSION 2.6)
+ 
+ PROJECT(ubus C)
++
++CMAKE_POLICY(SET CMP0042 OLD)
+ ADD_DEFINITIONS(-Os -Wall -Werror --std=gnu99 -g3 -Wmissing-declarations)
+ 
+ OPTION(BUILD_LUA "build Lua plugin" ON)
+@@ -14,11 +16,6 @@ SET(UBUS_MAX_MSGLEN 1048576)
+ ADD_DEFINITIONS( -DUBUS_UNIX_SOCKET="${UBUS_UNIX_SOCKET}")
+ ADD_DEFINITIONS( -DUBUS_MAX_MSGLEN=${UBUS_MAX_MSGLEN})
+ 
+-IF(APPLE)
+-  INCLUDE_DIRECTORIES(/opt/local/include)
+-  LINK_DIRECTORIES(/opt/local/lib)
+-ENDIF()
+-
+ ADD_LIBRARY(ubus SHARED libubus.c libubus-io.c libubus-obj.c libubus-sub.c libubus-req.c)
+ TARGET_LINK_LIBRARIES(ubus ubox)
+ 
+diff --git a/lua/CMakeLists.txt b/lua/CMakeLists.txt
+index e4821bf..a3e6c30 100644
+--- a/lua/CMakeLists.txt
++++ b/lua/CMakeLists.txt
+@@ -8,7 +8,7 @@ IF(NOT LUA_CFLAGS)
+ 	FIND_PROGRAM(PKG_CONFIG pkg-config)
+ 	IF(PKG_CONFIG)
+ 		EXECUTE_PROCESS(
+-			COMMAND pkg-config --silence-errors --cflags lua5.1
++			COMMAND pkg-config --silence-errors --cflags lua-5.1
+ 			OUTPUT_VARIABLE LUA_CFLAGS
+ 			OUTPUT_STRIP_TRAILING_WHITESPACE
+ 		)
+-- 
+2.2.2
+

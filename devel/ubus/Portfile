@@ -1,0 +1,34 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+# $Id$
+
+PortSystem                  1.0
+PortGroup                   cmake 1.0
+
+name                        ubus
+version                     20150122
+revision                    1
+categories                  devel
+platforms                   darwin
+maintainers                 yousong
+homepage                    "http://nbd.name/gitweb.cgi?p=luci2/uci.git;a=summary"
+
+description                 OpenWrt micro bus architecture
+
+fetch.type                  git
+git.url                     git://nbd.name/luci2/ubus.git
+git.branch                  2d660c519d2fcff95248da9f4fd9b37d61f9eb09
+
+depends_lib                 port:lua51
+
+patchfiles                  0001-build-fix-build-on-APPLE-platform-with-MacPorts.patch
+
+patch.pre_args              -p1
+
+configure.args-append       -DBUILD_LUA=FALSE
+
+if {[variant_isset debug]} {
+    configure.optflags -O1
+    configure.cflags-append -ggdb
+    configure.cxxflags-append -ggdb
+}
+
