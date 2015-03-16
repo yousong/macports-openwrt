@@ -1,0 +1,26 @@
+From 4d110ee4a2a55b6877913011eb2f5592ef2ce7a2 Mon Sep 17 00:00:00 2001
+From: Yousong Zhou <yszhou4tech@gmail.com>
+Date: Mon, 16 Mar 2015 10:06:11 +0800
+Subject: [PATCH 2/3] session: include <pwd.h> if HAVE_SHADOW is not defined.
+
+Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
+---
+ session.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/session.c b/session.c
+index b45d9fe..b322dd4 100644
+--- a/session.c
++++ b/session.c
+@@ -30,6 +30,8 @@
+ 
+ #ifdef HAVE_SHADOW
+ #include <shadow.h>
++#else
++#include <pwd.h>
+ #endif
+ 
+ #include <rpcd/session.h>
+-- 
+2.3.2
+

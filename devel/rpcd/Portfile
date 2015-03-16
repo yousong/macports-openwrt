@@ -1,0 +1,37 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+# $Id$
+
+PortSystem                  1.0
+PortGroup                   cmake 1.0
+
+name                        rpcd
+version                     20150310
+revision                    1
+categories                  devel
+platforms                   darwin
+maintainers                 yousong
+homepage                    "http://nbd.name/gitweb.cgi?p=luci2/rpcd.git;a=summary"
+
+description                 Ubus RPC server
+
+fetch.type                  git
+git.url                     git://nbd.name/luci2/rpcd.git
+git.branch                  361b823e8d670bc122349041294983468ef36845
+
+depends_lib                 port:json-c port:libubox port:ubus port:uci
+
+patchfiles                  0001-build-remove-hardcoded-path-for-APPLE-platform.patch \
+                            0002-session-include-pwd.h-if-HAVE_SHADOW-is-not-defined.patch \
+                            0003-uci-remove-unnecessary-GLOB_PERIOD-when-globing.patch
+
+
+patch.pre_args              -p1
+
+configure.args-append       -DIWINFO_SUPPORT=FALSE
+
+if {[variant_isset debug]} {
+    configure.optflags -O1
+    configure.cflags-append -ggdb
+    configure.cxxflags-append -ggdb
+}
+

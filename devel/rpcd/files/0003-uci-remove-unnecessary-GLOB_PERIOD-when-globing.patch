@@ -1,0 +1,50 @@
+From ea640e042369c67c38f35eee52740d3bd647acbf Mon Sep 17 00:00:00 2001
+From: Yousong Zhou <yszhou4tech@gmail.com>
+Date: Mon, 16 Mar 2015 10:06:22 +0800
+Subject: [PATCH 3/3] uci: remove unnecessary GLOB_PERIOD when globing.
+
+GLOB_PERIOD is not needed because subsequent calls on the globing result
+will ignore basenames of pathes starting with a period.
+
+This will also fix compilation on Mac OS X as GLOB_PERIOD is not
+available there (see CAVEATS section of glob(3)).
+
+Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
+---
+ uci.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/uci.c b/uci.c
+index acbbfd8..aea3de3 100644
+--- a/uci.c
++++ b/uci.c
+@@ -1307,7 +1307,7 @@ rpc_uci_apply_timeout(struct uloop_timeout *t)
+ 	char tmp[PATH_MAX];
+ 
+ 	snprintf(tmp, sizeof(tmp), "%s/*", RPC_SNAPSHOT_FILES);
+-	if (glob(tmp, GLOB_PERIOD, NULL, &gl) < 0)
++	if (glob(tmp, 0, NULL, &gl) < 0)
+ 		return;
+ 
+ 	rpc_uci_do_rollback(apply_ctx, NULL, &gl);
+@@ -1378,7 +1378,7 @@ rpc_uci_apply(struct ubus_context *ctx, struct ubus_object *obj,
+ 		mkdir(RPC_SNAPSHOT_DELTA, 0700);
+ 
+ 		snprintf(tmp, sizeof(tmp), RPC_UCI_SAVEDIR_PREFIX "%s/*", sid);
+-		if (glob(tmp, GLOB_PERIOD, NULL, &gl) < 0)
++		if (glob(tmp, 0, NULL, &gl) < 0)
+ 			return UBUS_STATUS_NOT_FOUND;
+ 
+ 		snprintf(tmp, sizeof(tmp), RPC_UCI_SAVEDIR_PREFIX "%s/", sid);
+@@ -1477,7 +1477,7 @@ rpc_uci_rollback(struct ubus_context *ctx, struct ubus_object *obj,
+ 		return UBUS_STATUS_PERMISSION_DENIED;
+ 
+ 	snprintf(tmp, sizeof(tmp), "%s/*", RPC_SNAPSHOT_FILES);
+-	if (glob(tmp, GLOB_PERIOD, NULL, &gl) < 0)
++	if (glob(tmp, 0, NULL, &gl) < 0)
+ 		return UBUS_STATUS_NOT_FOUND;
+ 
+ 	rpc_uci_do_rollback(ctx, sid, &gl);
+-- 
+2.3.2
+
