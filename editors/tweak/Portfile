@@ -4,7 +4,7 @@
 PortSystem          1.0
 
 name                tweak
-version             1.1
+version             2015-03-19
 categories          editors
 platforms           darwin
 maintainers         yousong
