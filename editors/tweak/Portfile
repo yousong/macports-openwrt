@@ -1,0 +1,48 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+# $Id$
+
+PortSystem          1.0
+
+name                tweak
+version             1.1
+categories          editors
+#license             GPL-2+
+platforms           darwin
+maintainers         yousong
+
+
+description         An efficient hex editor
+long_description    Tweak is a hex editor. It allows you to edit a file at \
+                    very low level, letting you see the full and exact binary \
+                    contents of the file. It can be useful for modifying \
+                    binary files such as executables, editing disk or CD \
+                    images, debugging programs that generate binary file \
+                    formats incorrectly, and many other things.
+
+homepage            http://www.chiark.greenend.org.uk/~sgtatham/tweak/
+
+fetch.type          git
+git.url             git://git.tartarus.org/simon/tweak.git
+git.branch          7296a07f0a936ed23fc2ea66fb648f1b67f2eddc
+
+use_configure       no
+
+variant universal {}
+
+depends_build       port:halibut
+depends_lib         port:ncurses
+
+build.env           CC=${configure.cc} \
+                    CFLAGS="${configure.cflags} [get_canonical_archflags cc]" \
+                    LDFLAGS="${configure.ldflags} [get_canonical_archflags ld]"
+
+destroot.args       BINDIR=${destroot}${prefix}/bin \
+                    MANDIR=${destroot}${prefix}/share/man/man1
+
+post-destroot {
+    xinstall -d -m 0755 ${destroot}${prefix}/share/doc/${name}
+    xinstall -m 0644 -W ${worksrcpath} LICENCE \
+        ${destroot}${prefix}/share/doc/${name}
+}
+
+
