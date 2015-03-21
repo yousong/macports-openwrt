@@ -1,4 +1,4 @@
-This is Portfile repository for porting packages such as libubox, ustream-ssl, etc. from OpenWrt project to Mac OS X.
+This is Portfile repository mainly for porting packages such as libubox, ustream-ssl, etc. from OpenWrt project to Mac OS X.  Also included are some utilities not included in upstream MacPorts yet, e.g. halibut, tweak, etc.
 
 ## How to use it.
 
