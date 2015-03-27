@@ -5,7 +5,7 @@ PortSystem                  1.0
 PortGroup                   cmake 1.0
 
 name                        uci
-version                     20150124
+version                     20150318
 revision                    1
 categories                  devel
 platforms                   darwin
@@ -16,7 +16,7 @@ description                 Library and utility for the Unified Configuration In
 
 fetch.type                  git
 git.url                     git://nbd.name/uci.git
-git.branch                  790d30606d545956a64f183c3199f472a70a6385
+git.branch                  06df8218e7036ad9bc03537d8039c6f4728602ac
 
 depends_lib                 port:lua51
 
