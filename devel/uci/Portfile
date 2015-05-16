@@ -18,7 +18,8 @@ fetch.type                  git
 git.url                     git://nbd.name/uci.git
 git.branch                  06df8218e7036ad9bc03537d8039c6f4728602ac
 
-depends_lib                 port:lua51
+depends_lib                 port:libubox \
+                            port:lua51
 
 patchfiles                  0001-build-fix-cmake-warning-on-APPLE-platform.patch
 
